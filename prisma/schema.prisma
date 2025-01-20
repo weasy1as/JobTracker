@@ -19,4 +19,17 @@ model User {
   username String  @unique
   password String
   name     String?
+  jobs     Job[]
+}
+
+model Job {
+  id              Int      @id @default(autoincrement())
+  userId          Int // Foreign key referencing User
+  user            User     @relation(fields: [userId], references: [id])
+  status          String   @default("applied") // applied, interview, offer, rejected
+  Name            String
+  companyName     String
+  applicationDate DateTime
+  position        String?
+  createdAt       DateTime @default(now())
 }
