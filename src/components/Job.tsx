@@ -22,14 +22,14 @@ const Job = ({ jobId }: { jobId: number }) => {
       try {
         setLoading(true);
         console.log("Fetching job details for Job ID:", id);
-        const response = await fetch(`/api/job/${id}`);
+        const response = await fetch(`/api/job/${id}/getJob`);
         if (!response.ok) {
           throw new Error("Failed to fetch job details.");
         }
         const data = await response.json();
         setJob(data.data);
         console.log(job);
-        setFormData(data);
+        setFormData(data.data);
       } catch (err: any) {
         setError(err.message || "Something went wrong.");
       } finally {
@@ -53,7 +53,7 @@ const Job = ({ jobId }: { jobId: number }) => {
 
   const handleSave = async () => {
     try {
-      const response = await fetch(`/api/job/${jobId}/edit`, {
+      const response = await fetch(`/api/job/${jobId}/editJob`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
