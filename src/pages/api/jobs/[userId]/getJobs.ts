@@ -16,11 +16,9 @@ export default async function handler(
   }
 
   try {
-    const id = parseInt(userId, 10);
-
     const jobs = await prisma.job.findMany({
       where: {
-        userId: id,
+        userId: Number(userId),
       },
     });
 

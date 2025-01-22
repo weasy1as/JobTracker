@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
+import { useRouter } from "next/navigation";
 
 type Job = {
   id: string;
@@ -16,6 +17,7 @@ const Job = ({ jobId }: { jobId: number }) => {
   const [formData, setFormData] = useState<Job | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchJob = async (id: number) => {
@@ -73,6 +75,26 @@ const Job = ({ jobId }: { jobId: number }) => {
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(`/api/job/${jobId}/deleteJob`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        alert("Job  DELETED successfully!");
+        router.push("/dashboard");
+      } else {
+        alert("Failed to delete job.");
+      }
+    } catch (error) {
+      console.error("Error deleting job:", error);
+    }
+  };
+
   if (loading) {
     return (
       <div>
@@ -95,7 +117,15 @@ const Job = ({ jobId }: { jobId: number }) => {
     <div>
       <Navbar />
       <div className="max-w-2xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4">Edit Job</h1>
+        <div className="w-full flex justify-between items-center">
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">Edit Job</h1>
+          <button
+            className="px-4 py-2 bg-red-600 text-white rounded-md"
+            onClick={handleDelete}
+          >
+            Delete
+          </button>
+        </div>
 
         <div className="mb-6">
           <h2 className="text-lg font-semibold text-gray-700 mb-2">
@@ -110,7 +140,9 @@ const Job = ({ jobId }: { jobId: number }) => {
             </p>
             <p>
               <strong>Applied On:</strong>{" "}
-              {new Date(job?.applicationDate).toDateString()}
+              {job?.applicationDate
+                ? new Date(job?.applicationDate).toDateString()
+                : "No date"}
             </p>
             <p>
               <strong>Status:</strong> {job?.status}

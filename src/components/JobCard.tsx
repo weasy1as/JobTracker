@@ -2,7 +2,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 
 type Job = {
-  name: string;
+  id: number;
   companyName: string;
   position: string;
   applicationDate: string;
