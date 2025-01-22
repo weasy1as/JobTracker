@@ -27,7 +27,6 @@ model Job {
   userId          Int // Foreign key referencing User
   user            User     @relation(fields: [userId], references: [id])
   status          String   @default("applied") // applied, interview, offer, rejected
-  Name            String
   companyName     String
   applicationDate DateTime
   position        String?
